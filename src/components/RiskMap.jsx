@@ -28,6 +28,9 @@ export class RiskMap extends React.Component {
                     trigger: 'item',
                     showDelay: 0,
                     transitionDuration: 0.2,
+                    formatter: function (params) {
+                        return 'New Cases: ' + params.data.new_cases
+                    }
                     
                 },
                 visualMap: {

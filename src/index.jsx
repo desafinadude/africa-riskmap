@@ -7,7 +7,12 @@ import { rolling } from './Math';
 import { RiskMap } from './components/RiskMap';
 import { Chart } from './components/Chart';
 import { CountryData } from './components/CountryData';
-// import { CountriesTable } from './components/CountriesTable';
+import Icon from '@mdi/react';
+import { mdiArrowLeft } from '@mdi/js';
+import { mdiArrowLeftBold } from '@mdi/js';
+import { mdiArrowTopRight } from '@mdi/js';
+import { mdiArrowBottomRight } from '@mdi/js';
+import { CountriesTable } from './components/CountriesTable';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,7 +20,6 @@ import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-import Alert from 'react-bootstrap/Alert';
 
 import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
@@ -272,19 +276,30 @@ export class App extends React.Component {
                             { this.state.selectedCountry == '' ?
                                 <h4>Africa</h4>
                             :
-                                <h4><span role="button" onClick={this.reset}>🡰</span>
-                                { this.state.selectedCountryData.iso_code != undefined &&
-                                <ReactCountryFlag
-                                    className="mx-3"
-                                    svg
-                                    countryCode={getCountryISO2(this.state.selectedCountryData.iso_code)}
-                                    style={{
-                                        position: 'relative', 
-                                        top: '-2px',
-                                        fontSize: '1.5em',
-                                        lineHeight: '1.5em',
-                                    }}
-                                />}{this.state.selectedCountryData.location}</h4>
+                                <h4>
+                                    <Icon path={mdiArrowLeft}
+                                    role="button" onClick={this.reset}
+                                    title="Back To Map"
+                                    size={1}
+                                    horizontal
+                                    vertical
+                                    rotate={180}
+                                    color="#094151"
+                                    />
+                                    { this.state.selectedCountryData.iso_code != undefined &&
+                                        <ReactCountryFlag
+                                        className="mx-3"
+                                        svg
+                                        countryCode={getCountryISO2(this.state.selectedCountryData.iso_code)}
+                                        style={{
+                                            position: 'relative', 
+                                            top: '-2px',
+                                            fontSize: '1.5em',
+                                            lineHeight: '1.5em',
+                                        }}
+                                        />
+                                    }
+                                {this.state.selectedCountryData.location}</h4>
                                 
                             }    
                             </Col>
@@ -304,57 +319,75 @@ export class App extends React.Component {
                         <Row>
                             <Col md={5}>
 
-                                { this.state.selectedCountry != '' ?    
+                                { this.state.selectedCountry != '' ?
+                                    <>
+                                        {/* {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1] != undefined &&
+                                            <Card className="shadow-sm mb-3 bg-body rounded">
+                                                <Card.Body>
+                                                <span style={{color: this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ? '#F1948A' : '#85C1E9'}}>
+                                                    {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ?
+                                                        <>
+                                                        <Icon path={mdiArrowTopRight}
+                                                        title="Cases are Increasing"
+                                                        size={1}
+                                                        className="me-3"
+                                                        />
+                                                        <span className="fs-5 fw-bold">Cases are Increasing</span>
+                                                        </>
+                                                    :
+                                                        <>
+                                                        <Icon path={mdiArrowBottomRight}
+                                                        title="Cases are Decreasing"
+                                                        size={1}
+                                                        className="me-3"
+                                                        />
+                                                        <span className="fs-5 fw-bold">Cases are Decreasing</span>
+                                                        </>
+                                                    }
+                                                </span>
+                                                </Card.Body>
+                                            </Card>
+                                        } */}
 
-                                    <Card className="shadow-sm p-3 mb-5 bg-body rounded">
-                                        <Card.Body>
-                                            <CountryData selectedCountryData={this.state.selectedCountryData} />
-                                        </Card.Body>
-                                    </Card>
+                                        <Card className="shadow-sm p-3 mb-5 bg-body rounded">
+                                            <Card.Body>
+                                                <CountryData selectedCountryData={this.state.selectedCountryData} />
+                                            </Card.Body>
+                                        </Card>
+                                        
+                                    </>
                                 : 
                                     <RiskMap timelineData={this.state.timelineData} dates={this.state.dates} onChange={this.changeCountryFromMap}/>
                                 }
 
                             </Col>
                             <Col>
-                                { this.state.selectedCountry != '' &&
+                                { this.state.selectedCountry != '' ?
 
                                     <>
-                                    {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1] != undefined &&
-                                        <Alert className="shadow-sm" variant={this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ? 'danger' : 'info'}>
-                                            {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ?
-                                                <span>Cases are Increasing</span>
-                                            :
-                                                <span>Cases are Decreasing</span>
-                                            }
-                                        </Alert>
-                                    }
-
-                                    <Card className="shadow-sm p-3 mb-5 bg-body rounded">
+                                    <Card className="shadow-sm mb-5 bg-body rounded">
                                         <Card.Body>
-
+                                            <Chart selectedCountryData={this.state.selectedCountryData} selectedCountryTimelineData={this.state.selectedCountryTimelineData} selectedField={this.state.selectedField} />
                                             { this.state.fields.length > 0 &&
                                                 <select
-                                                className="form-select form-select-sm mb-4" id="country-select"
+                                                className="form-select form-select-sm" id="country-select"
                                                 value={this.state.selectedField}
                                                 onChange={this.changeField}
                                                 >
                                                     { this.state.fields.map((field, index) => <option key={index} value={field}>{field}</option>) }
                                                 </select>
                                             }
-
-                                            <Chart selectedCountryData={this.state.selectedCountryData} selectedCountryTimelineData={this.state.selectedCountryTimelineData} selectedField={this.state.selectedField} />
                                         </Card.Body>
                                     </Card>
-
                                     </>
 
+                                :
                                 
-                                    // <Card className="shadow-sm p-3 mb-5 bg-body rounded"> 
-                                    //     <Card.Body>
-                                    //         <CountriesTable timelineData={this.state.timelineData} currentDate={this.state.dates[this.state.dates.length-1]}/>
-                                    //     </Card.Body>
-                                    // </Card>
+                                    <Card className="shadow-sm p-3 mb-5 bg-body rounded"> 
+                                        <Card.Body>
+                                            <CountriesTable timelineData={this.state.timelineData} currentDate={this.state.dates[this.state.dates.length-1]}/>
+                                        </Card.Body>
+                                    </Card>
                                             
                                 }
 
