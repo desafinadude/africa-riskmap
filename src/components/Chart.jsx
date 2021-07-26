@@ -105,7 +105,7 @@ export class Chart extends React.Component {
     
 
     componentDidUpdate() {
-        if(this.state.selectedCountryData != this.props.selectedCountryData || this.state.selectedField != this.props.selectedField) {
+        if(this.state.selectedCountryData != this.props.selectedCountryData || this.state.selectedField != this.props.selectedField || this.state.selectedCountryTimelineData != this.props.selectedCountryTimelineData) {
             this.setState({ selectedCountryData: this.props.selectedCountryData });
             this.setState({ selectedCountryTimelineData: this.props.selectedCountryTimelineData });
             this.setState({ selectedField: this.props.selectedField });

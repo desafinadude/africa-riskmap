@@ -89,17 +89,19 @@ export class RiskMap extends React.Component {
                 data: self.state.mapData
             }
         ]
-        
-        this.state.riskChart.setOption({series: newData});
-        this.state.riskChart.setOption(this.state.option);
+
 
         this.setState({ selectedDate: this.props.dates[this.props.dates.length-1] });
-        
+
+        this.state.riskChart.setOption({series: newData});
+
+        this.state.riskChart.setOption(this.state.option);
+
         this.updateRiskMap();
+        
 
         this.state.riskChart.on('click', function (params) {
-            
-            console.log(params);
+            self.props.onChange(params);
         });
 
 
@@ -107,6 +109,8 @@ export class RiskMap extends React.Component {
     }
 
     componentDidUpdate() {
+
+        this.updateRiskMap();
     }
 
     updateRiskMap() {
@@ -120,9 +124,6 @@ export class RiskMap extends React.Component {
             })
             if(selectedDateCountryData.length > 0) {
                 selectedDateCountryData[0].name = selectedDateCountryData[0].location;
-                if(selectedDateCountryData[0].iso_code == 'CIV') {
-                    selectedDateCountryData[0].name = "Côte d'Ivoire"
-                }
                 if(selectedDateCountryData[0].iso_code == 'CIV') {
                     selectedDateCountryData[0].name = "Côte d'Ivoire"
                 }

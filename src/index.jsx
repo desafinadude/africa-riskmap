@@ -217,24 +217,31 @@ export class App extends React.Component {
         this.setState({selectedField: 'new_deaths_smoothed_per_million'});
     }
 
-    changeCountry = (e) =>{
+    changeCountryFromMap = (e) => {
+        this.changeCountryExecute(e.data.iso_code);
+    }
 
-        this.setState({selectedCountry: e.target.value});
-        this.setState({selectedCountryData: _.filter(this.state.countriesData, function(o) { 
-                return o.iso_code == e.target.value;
+    changeCountry = (e) =>{
+        this.changeCountryExecute(e.target.value);
+    }
+
+    changeCountryExecute(iso_code) {
+        let self = this;
+
+        self.setState({selectedCountry: iso_code});
+        self.setState({selectedCountryData: _.filter(self.state.countriesData, function(o) { 
+                return o.iso_code == iso_code;
             })[0]
         })
 
-        let selectedCountryTimelineData = _.filter(this.state.timelineData, function(o) { 
-            return o[0].iso_code == e.target.value;
+        let selectedCountryTimelineData = _.filter(self.state.timelineData, function(o) { 
+            return o[0].iso_code == iso_code;
         })
 
-        this.setState({selectedCountryTimelineData: selectedCountryTimelineData[0] });
-
+        self.setState({selectedCountryTimelineData: selectedCountryTimelineData[0] });
     }
 
     changeField = (e) => {
-
         this.setState({ selectedField: e.target.value });
     }
 
@@ -266,6 +273,7 @@ export class App extends React.Component {
                                 <h4>Africa</h4>
                             :
                                 <h4><span role="button" onClick={this.reset}>🡰</span>
+                                { this.state.selectedCountryData.iso_code != undefined &&
                                 <ReactCountryFlag
                                     className="mx-3"
                                     svg
@@ -276,7 +284,8 @@ export class App extends React.Component {
                                         fontSize: '1.5em',
                                         lineHeight: '1.5em',
                                     }}
-                                />{this.state.selectedCountryData.location}</h4>
+                                />}{this.state.selectedCountryData.location}</h4>
+                                
                             }    
                             </Col>
                             <Col md={4}>
@@ -303,7 +312,7 @@ export class App extends React.Component {
                                         </Card.Body>
                                     </Card>
                                 : 
-                                    <RiskMap timelineData={this.state.timelineData} dates={this.state.dates}/>
+                                    <RiskMap timelineData={this.state.timelineData} dates={this.state.dates} onChange={this.changeCountryFromMap}/>
                                 }
 
                             </Col>
@@ -311,14 +320,15 @@ export class App extends React.Component {
                                 { this.state.selectedCountry != '' &&
 
                                     <>
-
-                                    <Alert className="shadow-sm" variant={this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ? 'danger' : 'info'}>
-                                        {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ?
-                                            <span>Cases are Increasing</span>
-                                        :
-                                            <span>Cases are Decreasing</span>
-                                        }
-                                    </Alert>
+                                    {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1] != undefined &&
+                                        <Alert className="shadow-sm" variant={this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ? 'danger' : 'info'}>
+                                            {this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-1].increasing_avg > this.state.selectedCountryTimelineData[this.state.selectedCountryTimelineData.length-2].increasing_avg ?
+                                                <span>Cases are Increasing</span>
+                                            :
+                                                <span>Cases are Decreasing</span>
+                                            }
+                                        </Alert>
+                                    }
 
                                     <Card className="shadow-sm p-3 mb-5 bg-body rounded">
                                         <Card.Body>
