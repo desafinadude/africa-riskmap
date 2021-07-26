@@ -1,11 +1,10 @@
 {
   "name": "africa-riskmap",
   "version": "1.0.0",
-  "main": "src/index.html",
   "license": "MIT",
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build ./src/index.html"
+    "build": "parcel build src/index.html"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.1",
