@@ -120,6 +120,12 @@ export class RiskMap extends React.Component {
             })
             if(selectedDateCountryData.length > 0) {
                 selectedDateCountryData[0].name = selectedDateCountryData[0].location;
+                if(selectedDateCountryData[0].iso_code == 'CIV') {
+                    selectedDateCountryData[0].name = "Côte d'Ivoire"
+                }
+                if(selectedDateCountryData[0].iso_code == 'CIV') {
+                    selectedDateCountryData[0].name = "Côte d'Ivoire"
+                }
                 selectedDateCountryData[0].value = selectedDateCountryData[0].increasing_avg;
                 selectedDateData.push(selectedDateCountryData[0]);
             }
