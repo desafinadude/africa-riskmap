@@ -24,6 +24,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
 
+import { Timeline } from 'react-twitter-widgets'
+
 import './app.scss';
 
 
@@ -365,7 +367,7 @@ export class App extends React.Component {
                                 { this.state.selectedCountry != '' ?
 
                                     <>
-                                    <Card className="shadow-sm mb-5 bg-body rounded">
+                                    <Card className="shadow-sm mb-3 bg-body rounded">
                                         <Card.Body>
                                             <Chart selectedCountryData={this.state.selectedCountryData} selectedCountryTimelineData={this.state.selectedCountryTimelineData} selectedField={this.state.selectedField} />
                                             { this.state.fields.length > 0 &&
@@ -379,6 +381,22 @@ export class App extends React.Component {
                                             }
                                         </Card.Body>
                                     </Card>
+
+                                    {this.state.selectedCountryData.iso_code == 'ZAF' &&
+                                            <Card className="shadow-sm mb-3 bg-body rounded">
+                                                <Card.Body>
+                                                    <Timeline
+                                                    dataSource={{
+                                                    sourceType: 'profile',
+                                                    screenName: 'covid_19_za'
+                                                    }}
+                                                    options={{
+                                                    height: '400'
+                                                    }}
+                                                    />
+                                                </Card.Body>
+                                            </Card>
+                                    }
                                     </>
 
                                 :
